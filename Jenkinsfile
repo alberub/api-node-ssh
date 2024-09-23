@@ -4,6 +4,9 @@ pipeline {
     environment {
         SERVER_IP = '159.223.183.48'
         APP_PATH = '/var/www/api-node'
+        SONAR_PROJECT_KEY = 'escaneo-api-node-ssh'
+        SONAR_PROJECT_NAME = 'api-node-ssh'
+        SONAR_PROJECT_VERSION = '1.0'
     }
     
     stages {
@@ -12,7 +15,20 @@ pipeline {
                 checkout scm
             }
         }
-        
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube server') {
+                    sh '''                    
+                    sonar-scanner \
+                    -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                    -Dsonar.projectName=${SONAR_PROJECT_NAME} \
+                    -Dsonar.projectVersion=${SONAR_PROJECT_VERSION} \
+                    -Dsonar.sources=. \
+                    -Dsonar.exclusions=**/node_modules/**
+                    '''
+                }
+            }
+        }
         stage('Preparación') {
             steps {
                 script {
