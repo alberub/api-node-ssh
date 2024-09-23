@@ -2,6 +2,14 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+function funcionDuplicada() {
+    return 'Códio duplicado para que falle sonar';
+}
+
+function funcionDuplicada() {
+    return 'Códio duplicado para que falle sonar';
+}
+
 // Ruta raíz
 app.get('/', (req, res) => {
     const cadena1 = 'Hola mundo';
@@ -10,7 +18,7 @@ app.get('/', (req, res) => {
     if (cadena1 == cadena2) {
         mensaje = 'Las cadenas son iguales';
     }
-    res.send(`Despliegue de api en servidor via SSH: ${mensaje}`);
+    res.send(funcionDuplicada());
 });
 
 app.listen(port, () => {
