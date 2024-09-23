@@ -133,8 +133,7 @@ pipeline {
                     <h2>Pipeline Falló en la etapa de SonarQube</h2>
                     <p>El commit realizado por: ${env.GIT_COMMIT_AUTHOR_EMAIL}</p>
                     <p>Mensaje del commit: ${env.GIT_COMMIT_MESSAGE}</p>
-                    <p>El análisis de SonarQube falló. Revisa los detalles en el siguiente enlace:</p>
-                    <a href="${sonarReportUrl}">Reporte de SonarQube</a>
+                    <p>El análisis de SonarQube falló. Revisa los detalles en el siguiente enlace:</p>                    
                     """,
                     to: "${env.GIT_COMMIT_AUTHOR_EMAIL}",
                     mimeType: 'text/html'
