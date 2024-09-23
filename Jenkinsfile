@@ -30,21 +30,24 @@ pipeline {
                         echo "Intentando conectar a ${env.SERVER_IP}"
                         
                         // Verificar conexión SSH
-                        sh "ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} 'echo \"Conexión SSH exitosa\"'" || error_exit()
+                        sh "ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} 'echo \"Conexión SSH exitosa\"'" 
+                        error_exit()  // Asegúrate de que esto se llame correctamente
                         
                         // Crear directorio en el servidor
                         sh """
                             ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
                                 mkdir -p "${env.APP_PATH}" && 
                                 echo "Directorio creado exitosamente"
-                            ' || error_exit()
+                            '
                         """
+                        error_exit()
                         
                         // Transferir archivos
                         sh """
                             scp -r * ${env.SERVER_IP}:"${env.APP_PATH}" && 
-                            echo "Archivos transferidos exitosamente" || error_exit()
+                            echo "Archivos transferidos exitosamente"
                         """
+                        error_exit()
                         
                         // Instalar dependencias
                         sh """
@@ -52,8 +55,9 @@ pipeline {
                                 cd "${env.APP_PATH}" && 
                                 npm ci && 
                                 echo "Dependencias instaladas exitosamente"
-                            ' || error_exit()
+                            '
                         """
+                        error_exit()
                     }
                 }
             }
@@ -74,8 +78,9 @@ pipeline {
                                     echo "Iniciando nueva instancia de la aplicación"
                                     pm2 start index.js --name api-nodejs && echo "Nueva instancia iniciada exitosamente"
                                 fi
-                            ' || error_exit()
+                            '
                         """
+                        error_exit()
                     }
                 }
             }
