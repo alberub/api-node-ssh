@@ -4,7 +4,7 @@ pipeline {
     environment {
         SSH_CREDENTIALS = 'sshServer'  // ID de las credenciales SSH para el servidor
         SERVER_IP = '159.223.183.48'
-        APP_PATH = '/var/www/api-nodejs'
+        APP_PATH = '/var/www/api-node-ssh'
     }
 
     stages {
