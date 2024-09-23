@@ -2,7 +2,6 @@ pipeline {
     agent any
     
     environment {
-        SSH_CREDENTIALS = credentials('ssh-credentials')
         SERVER_IP = credentials('server_ip')
         APP_PATH = credentials('app_path')
     }
@@ -26,21 +25,21 @@ pipeline {
         
         stage('Instalar dependencias y transferir archivos') {
             steps {
-                sshagent(credentials: [env.SSH_CREDENTIALS]) {
+                sshagent(credentials: ['ssh-credentials']) {
                     sh """
                         echo "Intentando conectar a ${env.SERVER_IP}"
-                        ssh -o StrictHostKeyChecking=no \${SERVER_IP} 'echo "Conexión SSH exitosa"'
+                        ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} 'echo "Conexión SSH exitosa"'
                         
                         echo "Creando directorio ${env.APP_PATH}"
-                        ssh -o StrictHostKeyChecking=no \${SERVER_IP} '
+                        ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
                             mkdir -p "${env.APP_PATH}" && echo "Directorio creado exitosamente"
                         '
                         
                         echo "Transfiriendo archivos"
-                        scp -r * \${SERVER_IP}:"${env.APP_PATH}" && echo "Archivos transferidos exitosamente"
+                        scp -r * ${env.SERVER_IP}:"${env.APP_PATH}" && echo "Archivos transferidos exitosamente"
                         
                         echo "Instalando dependencias"
-                        ssh -o StrictHostKeyChecking=no \${SERVER_IP} '
+                        ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
                             cd "${env.APP_PATH}" && 
                             npm ci && 
                             echo "Dependencias instaladas exitosamente"
@@ -52,10 +51,10 @@ pipeline {
         
         stage('Ejecutar aplicación con PM2') {
             steps {
-                sshagent(credentials: [env.SSH_CREDENTIALS]) {
+                sshagent(credentials: ['ssh-credentials']) {
                     sh """
                         echo "Iniciando/Reiniciando aplicación con PM2"
-                        ssh -o StrictHostKeyChecking=no \${SERVER_IP} '
+                        ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
                             cd "${env.APP_PATH}" &&
                             if pm2 describe api-nodejs > /dev/null; then
                                 echo "Reiniciando aplicación existente"
