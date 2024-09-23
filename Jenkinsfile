@@ -15,7 +15,7 @@ pipeline {
                     sh """
                     ssh -o StrictHostKeyChecking=no root@${SERVER_IP} << EOF
                     mkdir -p ${APP_PATH}
-                    echo ${APP_PATH}
+                    echo "${APP_PATH}"
                     EOF
                     scp -r * root@${SERVER_IP}:${APP_PATH}
                     ssh -o StrictHostKeyChecking=no root@${SERVER_IP} << EOF
