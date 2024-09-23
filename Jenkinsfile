@@ -29,6 +29,20 @@ pipeline {
                 }
             }
         }
+        
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 1, unit: 'MINUTES') { // Puedes ajustar el tiempo de espera
+                        def qualityGate = waitForQualityGate()
+                        if (qualityGate.status != 'OK') {
+                            error "La compuerta de calidad ha fallado con el estado: ${qualityGate.status}. Revisa el análisis de SonarQube para más detalles."
+                        }
+                    }
+                }
+            }
+        }
+        
         stage('Preparación') {
             steps {
                 script {
