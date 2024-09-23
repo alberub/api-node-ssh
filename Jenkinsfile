@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     environment {
-        SERVER_IP = credentials('server_ip')
-        APP_PATH = credentials('app_path')
+        SERVER_IP = '159.223.183.48'
+        APP_PATH = '/var/www/api-node-ssh'
     }
     
     stages {
