@@ -30,34 +30,30 @@ pipeline {
                         echo "Intentando conectar a ${env.SERVER_IP}"
                         
                         // Verificar conexión SSH
-                        sh "ssh -o StrictHostKeyChecking=no root@159.223.183.48 'echo "Conexión SSH exitosa"'" 
-                        error_exit()  // Asegúrate de que esto se llame correctamente
+                        sh "ssh -o StrictHostKeyChecking=no root@${env.SERVER_IP} 'echo \"Conexión SSH exitosa\"'" 
                         
                         // Crear directorio en el servidor
                         sh """
-                            ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
+                            ssh -o StrictHostKeyChecking=no root@${env.SERVER_IP} '
                                 mkdir -p "${env.APP_PATH}" && 
                                 echo "Directorio creado exitosamente"
                             '
                         """
-                        error_exit()
                         
                         // Transferir archivos
                         sh """
-                            scp -r * ${env.SERVER_IP}:"${env.APP_PATH}" && 
+                            scp -r * root@${env.SERVER_IP}:"${env.APP_PATH}" && 
                             echo "Archivos transferidos exitosamente"
                         """
-                        error_exit()
                         
                         // Instalar dependencias
                         sh """
-                            ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
+                            ssh -o StrictHostKeyChecking=no root@${env.SERVER_IP} '
                                 cd "${env.APP_PATH}" && 
                                 npm ci && 
                                 echo "Dependencias instaladas exitosamente"
                             '
                         """
-                        error_exit()
                     }
                 }
             }
@@ -69,7 +65,7 @@ pipeline {
                     script {
                         echo "Iniciando/Reiniciando aplicación con PM2"
                         sh """
-                            ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
+                            ssh -o StrictHostKeyChecking=no root@${env.SERVER_IP} '
                                 cd "${env.APP_PATH}" &&
                                 if pm2 describe api-nodejs > /dev/null; then
                                     echo "Reiniciando aplicación existente"
@@ -80,7 +76,6 @@ pipeline {
                                 fi
                             '
                         """
-                        error_exit()
                     }
                 }
             }
@@ -95,9 +90,4 @@ pipeline {
             echo 'Error durante el despliegue. Revisa los logs anteriores para más detalles.'
         }
     }
-}
-
-// Función para manejar errores
-def error_exit() {
-    error("Se produjo un error en la etapa actual.")
 }
