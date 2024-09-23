@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         SERVER_IP = '159.223.183.48'
-        APP_PATH = '/var/www/api-node-ssh'
+        APP_PATH = '/var/www/api-node'
     }
     
     stages {
@@ -30,7 +30,7 @@ pipeline {
                         echo "Intentando conectar a ${env.SERVER_IP}"
                         
                         // Verificar conexión SSH
-                        sh "ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} 'echo \"Conexión SSH exitosa\"'" 
+                        sh "ssh -o StrictHostKeyChecking=no root@159.223.183.48 'echo "Conexión SSH exitosa"'" 
                         error_exit()  // Asegúrate de que esto se llame correctamente
                         
                         // Crear directorio en el servidor
