@@ -2,9 +2,9 @@ pipeline {
     agent any
     
     environment {
-        SSH_CREDENTIALS = credentials('ssh-credentials')  // Usa credentials() para manejar de forma segura
-        SERVER_IP = credentials('server_ip')        // Usa credentials() para el IP del servidor
-        APP_PATH = credentials('app_path')          // Usa credentials() para la ruta de la aplicación
+        SSH_CREDENTIALS = credentials('sh-credentials')
+        SERVER_IP = credentials('server_ip')
+        APP_PATH = credentials('app_path')
     }
     
     stages {
@@ -27,12 +27,12 @@ pipeline {
                 sshagent(credentials: [env.SSH_CREDENTIALS]) {
                     sh """
                         ssh -o StrictHostKeyChecking=no \${SERVER_IP} '
-                            mkdir -p ${APP_PATH}
+                            mkdir -p "${env.APP_PATH}"
                         '
-                        scp -r * \${SERVER_IP}:${APP_PATH}
+                        scp -r * \${SERVER_IP}:"${env.APP_PATH}"
                         ssh -o StrictHostKeyChecking=no \${SERVER_IP} '
-                            cd ${APP_PATH}
-                            npm ci  # Usa npm ci en lugar de npm install para instalaciones más consistentes
+                            cd "${env.APP_PATH}"
+                            npm ci
                         '
                     """
                 }
@@ -44,9 +44,9 @@ pipeline {
                 sshagent(credentials: [env.SSH_CREDENTIALS]) {
                     sh """
                         ssh -o StrictHostKeyChecking=no \${SERVER_IP} '
-                            cd ${APP_PATH}
+                            cd "${env.APP_PATH}"
                             pm2 describe api-nodejs > /dev/null
-                            if [ $? -eq 0 ]; then
+                            if [ \$? -eq 0 ]; then
                                 pm2 reload api-nodejs
                             else
                                 pm2 start index.js --name api-nodejs
