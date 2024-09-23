@@ -4,7 +4,7 @@ const port = 3000;
 
 // Ruta raíz
 app.get('/', (req, res) => {
-    res.send('¡Hola desde mi API - despliegue via SSH');
+    res.send('¡Despliegue de api con jenkins via SSH');
 });
 
 app.listen(port, () => {
