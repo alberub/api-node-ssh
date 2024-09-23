@@ -49,8 +49,9 @@ pipeline {
                         // Instalar dependencias
                         sh """
                             ssh -o StrictHostKeyChecking=no root@${env.SERVER_IP} '
+                                source ~/.nvm/nvm.sh && 
                                 cd "${env.APP_PATH}" && 
-                                npm ci && 
+                                /root/.nvm/versions/node/v22.9.0/bin/npm ci && 
                                 echo "Dependencias instaladas exitosamente"
                             '
                         """
@@ -67,6 +68,7 @@ pipeline {
                         sh """
                             ssh -o StrictHostKeyChecking=no root@${env.SERVER_IP} '
                                 cd "${env.APP_PATH}" &&
+                                source ~/.nvm/nvm.sh &&  // Asegúrate de que nvm esté disponible
                                 if pm2 describe api-nodejs > /dev/null; then
                                     echo "Reiniciando aplicación existente"
                                     pm2 reload api-nodejs && echo "Aplicación reiniciada exitosamente"
