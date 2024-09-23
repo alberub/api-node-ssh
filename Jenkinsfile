@@ -8,13 +8,6 @@ pipeline {
     }
 
     stages {
-        stage('Imprimir APP_PATH') {
-            steps {
-                script {
-                    echo "El valor de APP_PATH es: ${env.APP_PATH}"
-                }
-            }
-        }
         stage('Instalar dependencias') {
             steps {
                 // Transferir los archivos al servidor
