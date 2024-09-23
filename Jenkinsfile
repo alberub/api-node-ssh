@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        SSH_CREDENTIALS = credentials('sh-credentials')
+        SSH_CREDENTIALS = credentials('ssh-credentials')
         SERVER_IP = credentials('server_ip')
         APP_PATH = credentials('app_path')
     }
@@ -18,6 +18,8 @@ pipeline {
             steps {
                 script {
                     echo "Preparando despliegue en: ${env.APP_PATH}"
+                    echo "IP del servidor: ${env.SERVER_IP}"
+                    sh 'env | sort'  // Imprime todas las variables de entorno
                 }
             }
         }
@@ -26,13 +28,22 @@ pipeline {
             steps {
                 sshagent(credentials: [env.SSH_CREDENTIALS]) {
                     sh """
+                        echo "Intentando conectar a ${env.SERVER_IP}"
+                        ssh -o StrictHostKeyChecking=no \${SERVER_IP} 'echo "Conexión SSH exitosa"'
+                        
+                        echo "Creando directorio ${env.APP_PATH}"
                         ssh -o StrictHostKeyChecking=no \${SERVER_IP} '
-                            mkdir -p "${env.APP_PATH}"
+                            mkdir -p "${env.APP_PATH}" && echo "Directorio creado exitosamente"
                         '
-                        scp -r * \${SERVER_IP}:"${env.APP_PATH}"
+                        
+                        echo "Transfiriendo archivos"
+                        scp -r * \${SERVER_IP}:"${env.APP_PATH}" && echo "Archivos transferidos exitosamente"
+                        
+                        echo "Instalando dependencias"
                         ssh -o StrictHostKeyChecking=no \${SERVER_IP} '
-                            cd "${env.APP_PATH}"
-                            npm ci
+                            cd "${env.APP_PATH}" && 
+                            npm ci && 
+                            echo "Dependencias instaladas exitosamente"
                         '
                     """
                 }
@@ -43,13 +54,15 @@ pipeline {
             steps {
                 sshagent(credentials: [env.SSH_CREDENTIALS]) {
                     sh """
+                        echo "Iniciando/Reiniciando aplicación con PM2"
                         ssh -o StrictHostKeyChecking=no \${SERVER_IP} '
-                            cd "${env.APP_PATH}"
-                            pm2 describe api-nodejs > /dev/null
-                            if [ \$? -eq 0 ]; then
-                                pm2 reload api-nodejs
+                            cd "${env.APP_PATH}" &&
+                            if pm2 describe api-nodejs > /dev/null; then
+                                echo "Reiniciando aplicación existente"
+                                pm2 reload api-nodejs && echo "Aplicación reiniciada exitosamente"
                             else
-                                pm2 start index.js --name api-nodejs
+                                echo "Iniciando nueva instancia de la aplicación"
+                                pm2 start index.js --name api-nodejs && echo "Nueva instancia iniciada exitosamente"
                             fi
                         '
                     """
@@ -63,7 +76,7 @@ pipeline {
             echo 'Despliegue completado con éxito!'
         }
         failure {
-            echo 'Error durante el despliegue. Revisa los logs para más detalles.'
+            echo 'Error durante el despliegue. Revisa los logs anteriores para más detalles.'
         }
     }
 }
