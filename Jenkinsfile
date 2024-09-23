@@ -26,25 +26,35 @@ pipeline {
         stage('Instalar dependencias y transferir archivos') {
             steps {
                 sshagent(credentials: ['ssh-credentials']) {
-                    sh """
+                    script {
                         echo "Intentando conectar a ${env.SERVER_IP}"
-                        ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} 'echo "Conexión SSH exitosa"'
                         
-                        echo "Creando directorio ${env.APP_PATH}"
-                        ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
-                            mkdir -p "${env.APP_PATH}" && echo "Directorio creado exitosamente"
-                        '
+                        // Conexión SSH para verificar que funciona
+                        sh "ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} 'echo \"Conexión SSH exitosa\"' || error_exit"
                         
-                        echo "Transfiriendo archivos"
-                        scp -r * ${env.SERVER_IP}:"${env.APP_PATH}" && echo "Archivos transferidos exitosamente"
+                        // Crear directorio en el servidor
+                        sh """
+                            ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
+                                mkdir -p "${env.APP_PATH}" && 
+                                echo "Directorio creado exitosamente"
+                            ' || error_exit
+                        """
                         
-                        echo "Instalando dependencias"
-                        ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
-                            cd "${env.APP_PATH}" && 
-                            npm ci && 
-                            echo "Dependencias instaladas exitosamente"
-                        '
-                    """
+                        // Transferir archivos
+                        sh """
+                            scp -r * ${env.SERVER_IP}:"${env.APP_PATH}" && 
+                            echo "Archivos transferidos exitosamente" || error_exit
+                        """
+                        
+                        // Instalar dependencias
+                        sh """
+                            ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
+                                cd "${env.APP_PATH}" && 
+                                npm ci && 
+                                echo "Dependencias instaladas exitosamente"
+                            ' || error_exit
+                        """
+                    }
                 }
             }
         }
@@ -52,19 +62,21 @@ pipeline {
         stage('Ejecutar aplicación con PM2') {
             steps {
                 sshagent(credentials: ['ssh-credentials']) {
-                    sh """
+                    script {
                         echo "Iniciando/Reiniciando aplicación con PM2"
-                        ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
-                            cd "${env.APP_PATH}" &&
-                            if pm2 describe api-nodejs > /dev/null; then
-                                echo "Reiniciando aplicación existente"
-                                pm2 reload api-nodejs && echo "Aplicación reiniciada exitosamente"
-                            else
-                                echo "Iniciando nueva instancia de la aplicación"
-                                pm2 start index.js --name api-nodejs && echo "Nueva instancia iniciada exitosamente"
-                            fi
-                        '
-                    """
+                        sh """
+                            ssh -o StrictHostKeyChecking=no ${env.SERVER_IP} '
+                                cd "${env.APP_PATH}" &&
+                                if pm2 describe api-nodejs > /dev/null; then
+                                    echo "Reiniciando aplicación existente"
+                                    pm2 reload api-nodejs && echo "Aplicación reiniciada exitosamente"
+                                else
+                                    echo "Iniciando nueva instancia de la aplicación"
+                                    pm2 start index.js --name api-nodejs && echo "Nueva instancia iniciada exitosamente"
+                                fi
+                            ' || error_exit
+                        """
+                    }
                 }
             }
         }
@@ -78,4 +90,9 @@ pipeline {
             echo 'Error durante el despliegue. Revisa los logs anteriores para más detalles.'
         }
     }
+}
+
+// Función para manejar errores
+def error_exit() {
+    error("Se produjo un error en la etapa actual.")
 }
