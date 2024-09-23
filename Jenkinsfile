@@ -8,14 +8,20 @@ pipeline {
     }
 
     stages {
+        stage('Imprimir APP_PATH') {
+            steps {
+                script {
+                    echo "El valor de APP_PATH es: ${env.APP_PATH}"
+                }
+            }
+        }
         stage('Instalar dependencias') {
             steps {
                 // Transferir los archivos al servidor
                 sshagent (credentials: [SSH_CREDENTIALS]) {
                     sh """
                     ssh -o StrictHostKeyChecking=no root@${SERVER_IP} << EOF
-                    mkdir -p ${APP_PATH}
-                    echo "${APP_PATH}"
+                    mkdir -p ${APP_PATH}            
                     EOF
                     scp -r * root@${SERVER_IP}:${APP_PATH}
                     ssh -o StrictHostKeyChecking=no root@${SERVER_IP} << EOF
