@@ -13,6 +13,10 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                script{
+                    env.GIT_COMMIT_AUTHOR_EMAIL = sh(script: "git log -1 --pretty=format:'%ae'", returnStdout: true).trim()
+                    env.GIT_COMMIT_MESSAGE = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+                }
             }
         }
         stage('SonarQube Analysis') {
@@ -117,7 +121,25 @@ pipeline {
             echo 'Despliegue completado con éxito!'
         }
         failure {
-            echo 'Error durante el despliegue. Revisa los logs anteriores para más detalles.'
+            script {
+
+                def sonarHostUrl = "${env.SERVER_IP}:9000"
+                def sonarReportUrl = "${sonarHostUrl}/dashboard?id=${env.SONAR_PROJECT_KEY}"
+
+                // Enviar correo al autor del commit
+                emailext(
+                    subject: "Pipeline Falló: Análisis de SonarQube no pasó",
+                    body: """
+                    <h2>Pipeline Falló en la etapa de SonarQube</h2>
+                    <p>El commit realizado por: ${env.GIT_COMMIT_AUTHOR_EMAIL}</p>
+                    <p>Mensaje del commit: ${env.GIT_COMMIT_MESSAGE}</p>
+                    <p>El análisis de SonarQube falló. Revisa los detalles en el siguiente enlace:</p>
+                    <a href="${sonarReportUrl}">Reporte de SonarQube</a>
+                    """,
+                    to: "${env.GIT_COMMIT_AUTHOR_EMAIL}",
+                    mimeType: 'text/html'
+                )
+            }
         }
     }
 }
