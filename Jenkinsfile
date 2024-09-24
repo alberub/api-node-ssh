@@ -119,8 +119,8 @@ pipeline {
     post {
         always {
             emailext (
-                subject: "Resultado del Pipeline: ${currentBuild.result} de ${API_NAME}",
-                body: '${SCRIPT, template="email.html", API_NAME="${API_NAME}", BUILD_STATUS="${currentBuild.result}"}',
+                subject: "Resultado del Pipeline: ${currentBuild.result} de ${env.API_NAME}",
+                body: '${SCRIPT, template="email.html", API_NAME="${env.API_NAME}", BUILD_STATUS="${currentBuild.result}"}',
                 mimeType: 'text/html',
                 to: 'rios.alb2606@gmail.com',
                 recipientProviders: [[$class: 'CulpritsRecipientProvider']]
