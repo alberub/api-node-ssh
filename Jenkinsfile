@@ -7,6 +7,7 @@ pipeline {
         SONAR_PROJECT_KEY = 'escaneo-api-node-ssh'
         SONAR_PROJECT_NAME = 'api-node-ssh'
         SONAR_PROJECT_VERSION = '1.0'
+        API_NAME = 'Nombre de la api'
     }
     
     stages {
