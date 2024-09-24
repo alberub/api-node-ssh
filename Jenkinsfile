@@ -117,28 +117,13 @@ pipeline {
     }
     
     post {
-        success {
-            echo 'Despliegue completado con éxito!'
-        }
-        failure {
-            script {
-
-                def sonarHostUrl = "${env.SERVER_IP}:9000"
-                def sonarReportUrl = "${sonarHostUrl}/dashboard?id=${env.SONAR_PROJECT_KEY}"
-
-                // Enviar correo al autor del commit
-                emailext(
-                    subject: "Pipeline Falló: Análisis de SonarQube no pasó",
-                    body: """
-                    <h2>Pipeline Falló en la etapa de SonarQube</h2>
-                    <p>El commit realizado por: ${env.GIT_COMMIT_AUTHOR_EMAIL}</p>
-                    <p>Mensaje del commit: ${env.GIT_COMMIT_MESSAGE}</p>
-                    <p>El análisis de SonarQube falló. Revisa los detalles en el siguiente enlace:</p>                    
-                    """,
-                    to: "${env.GIT_COMMIT_AUTHOR_EMAIL}",
-                    mimeType: 'text/html'
-                )
-            }
+        always {
+            emailext (
+                subject: "Resultado del Pipeline: variable current build de variable api name",
+                body: '${SCRIPT, template="email-template.html", API_NAME="variable nombre api", BUILD_STATUS="variable current build"}',
+                mimeType: 'text/html',
+                to: 'rios.alb2606@gmail.com'
+            )
         }
     }
 }
