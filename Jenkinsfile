@@ -120,7 +120,7 @@ pipeline {
         always {
             emailext (
                 subject: "Resultado del Pipeline: variable current build de variable api name",
-                body: '${SCRIPT, template="email-template.html", API_NAME="variable nombre api", BUILD_STATUS="variable current build"}',
+                body: '${SCRIPT, template="email.html", API_NAME="variable nombre api", BUILD_STATUS="variable current build"}',
                 mimeType: 'text/html',
                 to: 'rios.alb2606@gmail.com'
             )
