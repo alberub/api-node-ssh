@@ -7,6 +7,7 @@ pipeline {
         SONAR_PROJECT_KEY = 'escaneo-api-node-ssh'
         SONAR_PROJECT_NAME = 'api-node-ssh'
         SONAR_PROJECT_VERSION = '1.0'
+        API_NAME = 'Variable api_name'
     }
     
     stages {
@@ -115,14 +116,14 @@ pipeline {
             }
         }
     }
-    
     post {
         always {
             emailext (
-                subject: "Resultado del Pipeline: variable current build de variable api name",
-                body: '${SCRIPT, template="email.html", API_NAME="variable nombre api", BUILD_STATUS="variable current build"}',
+                subject: "Resultado del Pipeline: ${currentBuild.result} de ${API_NAME}",
+                body: '${SCRIPT, template="email.html"}',
                 mimeType: 'text/html',
-                to: 'rios.alb2606@gmail.com'
+                to: 'rios.alb2606@gmail.com',
+                recipientProviders: [[$class: 'CulpritsRecipientProvider']]
             )
         }
     }
