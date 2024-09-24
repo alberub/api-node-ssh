@@ -118,7 +118,7 @@ pipeline {
     }
     post {
         always {                        
-            emailext body: '''
+            emailext body: """
                 <html>
                 <head>
                     <style>
@@ -175,11 +175,10 @@ pipeline {
                     </div>
                 </body>
                 </html>
-                ''',
+                """,
                 subject: "Resultado del Pipeline: ${currentBuild.result} de ${env.API_NAME}",
                 to: 'rios.alb2606@gmail.com',
-                recipientProviders: [[$class: 'CulpritsRecipientProvider']]
-                mimeType: 'text/html'
+                recipientProviders: [[$class: 'CulpritsRecipientProvider']]                
         }
     }
 }
