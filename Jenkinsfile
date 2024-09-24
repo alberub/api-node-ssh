@@ -129,7 +129,7 @@ pipeline {
                         padding: 0;
                     }
                     .container {
-                        width: 80%;
+                        width: 100%;
                         margin: 0 auto;
                         background-color: #ffffff;
                         padding: 20px;
@@ -160,18 +160,18 @@ pipeline {
                 </head>
                 <body>
                     <div class="container">
-                    <div class="header">
-                        <h1>Resultado del Pipeline para la API: ${env.API_NAME}</h1>
-                    </div>
-                    <div class="content">
-                        <p>Hola,</p>
-                        <p>Este es el resultado del último pipeline de la API <b>${env.API_NAME}</b>:</p>
-                        <p>Estado del build: <b>${env.BUILD_STATUS}</b></p>
-                        <p>Puedes ver más detalles del build <a href="${env.BUILD_URL}">aquí</a>.</p>
-                    </div>
-                    <div class="footer">
-                        <p>Este es un mensaje automático generado por Jenkins.</p>
-                    </div>
+                        <div class="header">
+                            <h1>Resultado del Pipeline para la API: ${env.API_NAME}</h1>
+                        </div>
+                        <div class="content">
+                            <p>Hola,</p>
+                            <p>Este es el resultado del último pipeline de la API <b>${env.API_NAME}</b>:</p>
+                            <p>Estado del build: <b>${env.BUILD_STATUS}</b></p>
+                            <p>Puedes ver más detalles del build <a href="${env.BUILD_URL}">aquí</a>.</p>
+                        </div>
+                        <div class="footer">
+                            <p>Este es un mensaje automático generado por Jenkins.</p>
+                        </div>
                     </div>
                 </body>
                 </html>
