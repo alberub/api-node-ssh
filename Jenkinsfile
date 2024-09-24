@@ -118,10 +118,68 @@ pipeline {
     }
     post {
         always {                        
-            emailext body: '${FILE,path="/var/lib/jenkins/email-templates/email.html", API_NAME='${env.API_NAME}', BUILD_STATUS='${currentBuild.result}'}',
+            emailext body: '''
+                <html>
+                <head>
+                    <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f0f0f0;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .container {
+                        width: 80%;
+                        margin: 0 auto;
+                        background-color: #ffffff;
+                        padding: 20px;
+                        border-radius: 10px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    }
+                    .header {
+                        background-color: #4CAF50;
+                        color: white;
+                        text-align: center;
+                        padding: 10px;
+                        border-radius: 10px 10px 0 0;
+                    }
+                    .content {
+                        padding: 20px;
+                        text-align: left;
+                    }
+                    .content p {
+                        line-height: 1.6;
+                    }
+                    .footer {
+                        margin-top: 20px;
+                        text-align: center;
+                        font-size: 12px;
+                        color: #666666;
+                    }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                    <div class="header">
+                        <h1>Resultado del Pipeline para la API: ${env.API_NAME}</h1>
+                    </div>
+                    <div class="content">
+                        <p>Hola,</p>
+                        <p>Este es el resultado del último pipeline de la API <b>${env.API_NAME}</b>:</p>
+                        <p>Estado del build: <b>${env.BUILD_STATUS}</b></p>
+                        <p>Puedes ver más detalles del build <a href="${env.BUILD_URL}">aquí</a>.</p>
+                    </div>
+                    <div class="footer">
+                        <p>Este es un mensaje automático generado por Jenkins.</p>
+                    </div>
+                    </div>
+                </body>
+                </html>
+                ''',
                 subject: "Resultado del Pipeline: ${currentBuild.result} de ${env.API_NAME}",
                 to: 'rios.alb2606@gmail.com',
                 recipientProviders: [[$class: 'CulpritsRecipientProvider']]
+                mimeType: 'text/html'
         }
     }
 }
