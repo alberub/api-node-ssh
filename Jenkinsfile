@@ -303,7 +303,7 @@ pipeline {
                                     <span>Ran for ${env.BUILD_DURATION}</span>
                                 </div>
                                 <div class="datos__resultados">
-                                    <a class="boton" href="${env.SONAR_REPORT_URL}" target="_blank">Ver resultados</a>
+                                    <a class="boton" href="https://google.com.mx" target="_blank">Ver resultados</a>
                                 </div>
                             </div>     
                             <div class="detalles">
