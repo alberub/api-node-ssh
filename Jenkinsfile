@@ -193,12 +193,13 @@ pipeline {
         .datos__resultados{
           margin-top: 20px;
         }
-        .datos__resultados button{
+        .datos__resultados a{
             color: white;
             background-color: #0078d4;
             font-size: 14px;
             padding: 8px 12px;
             border: none;
+            text-decoration: none;
             cursor: pointer;
         }      
         /* ********************************************* */
@@ -276,7 +277,7 @@ pipeline {
                 <span>Ran for 32 seconds</span>
             </div>
             <div class="datos__resultados">
-                <button class="boton">Ver resultados</button>
+                <a class="boton" href="https://google.com.mx" target="_blank">Ver resultados</a>
             </div>
         </div>     
         <div class="detalles">
