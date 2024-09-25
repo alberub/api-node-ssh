@@ -119,122 +119,118 @@ pipeline {
     post {
         always {                        
             emailext body: """
-                    <html>
-                    <head>
-                        <style>
-                            *{
-                                box-sizing: border-box;
-                            }
-                            body {
-                                font-family: Arial, sans-serif;
-                                background-color: #fff;
-                                margin: 0;
-                                padding: 0;
-                                box-sizing: border-box;
-                            }
-                            .container {
-                                display: flex;
-                                flex-direction: column;
-                                align-items: center;            
-                                width: 80%;
-                                margin: 0 auto;
-                                background-color: #f8f8f8;
-                                padding: 20px;
-                            }
-                            /* *************************************************** */
-                            .datos__generales{          
-                            min-width: 640px;
-                            max-width: 640px;
-                            height: auto;
-                            padding: 30px 0;          
-                            }
-                            .datos__logos{
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;                
-                            }
-                            .datos__logos .img__jenkins{
-                                width: auto;
-                                height: 30px;
-                            }
-                            .datos__logos .img__aws{
-                                width: auto;
-                                height: 50px;
-                            }
-                            .datos__build{
-                                width: 100%;
-                                height: 40px;
-                                line-height: 40px;
-                                margin-top: 10px;
-                                /* border: 1px solid red;             */
-                            }
-                            .datos__build span:not(.icono){
-                            font-size: 14px;
-                            margin-left: 7px;
-                            }
-                            .datos__build .estatus{
-                            font-size: 12px;
-                            padding: 2px;
-                            background-color: #fde293;          
-                            }
-                            .datos__generales .datos__build .icono{
-                            height: 40px;
-                            line-height: 40px;
-                            color: red;
-                            }
-                            /* ********************************************* */
-                            .datos__nombre{
-                                font-size: 24px;
-                                font-weight: bold;
-                                margin-top: 20px;
-                            }
-                            .datos__tiempo{
-                                margin-top: 20px;
-                                font-size: 13px;
-                            }
-                            .datos__resultados{
-                            margin-top: 20px;
-                            }
-                            .datos__resultados button{
-                                color: white;
-                                background-color: #0078d4;
-                                font-size: 14px;
-                                padding: 8px 12px;
-                                border: none;
-                                cursor: pointer;
-                            }        
-                        </style>
-                    </head>
-                    <body>
-                        <div class="container">
-                            <div class="datos__generales">
-                                <div class="datos__logos">
-                                    <img class="img__jenkins" src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Jenkins_logo_with_title.svg" alt="">
-                                    <img class="img__aws" src="https://www.grupoinversores.com/wp-content/uploads/2022/06/aws-logo-teaser-1.png" alt="">
-                                </div>
-                                <div class="datos__build">
-                                    <span class="icono">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
-                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
-                                        </svg>
-                                    </span>              
-                                    <span>BUILD #20240923.8</span>
-                                    <span class="estatus">FAILED</span>
-                                    
-                                </div>
-                                <div class="datos__nombre">
-                                    <span>api-registro-express-nodejs-20</span>
-                                </div>
-                                <div class="datos__tiempo">
-                                    <span>Ran for 32 seconds</span>
-                                </div>
-                                <div class="datos__resultados">
-                                    <button class="boton">Ver resultados</button>
-                                </div>
-                            </div>       
-                        </div>
-                    </body>
-                    </html>
+<html>
+  <head>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {          
+            width: 80%;
+            margin: 0 auto;
+            background-color: #f8f8f8;
+            padding: 20px;
+            padding: 0 calc((80% - 640px) / 2);
+          }
+          /* *************************************************** */
+        .datos__generales{          
+          width: 640px;
+          height: auto;
+          padding: 30px 0;          
+        }
+        /* *************************************************** */
+        .datos__logos{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;            
+        }
+        .datos__logos .img__jenkins{
+            width: auto;
+            height: 30px;
+            float: left;
+        }
+        .datos__logos .img__aws{
+            width: auto;
+            height: 40px;
+            float: right;
+        }
+        /* ******************************************************* */
+        .datos__build{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            margin-top: 10px;            
+        }
+        .datos__build span:not(.icono){
+          font-size: 12px;
+          margin-left: 7px;
+        }
+        .datos__build .estatus{
+          font-size: 12px;
+          padding: 2px;
+          background-color: #fde293;          
+        }
+ 
+        .datos__build img{
+          width: 16px;
+          height: 16px;          
+        }
+        /* ********************************************* */
+        .datos__nombre{
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .datos__tiempo{
+            margin-top: 20px;
+            font-size: 13px;
+        }
+        .datos__resultados{
+          margin-top: 20px;
+        }
+        .datos__resultados button{
+            color: white;
+            background-color: #0078d4;
+            font-size: 14px;
+            padding: 8px 12px;
+            border: none;
+            cursor: pointer;
+        }        
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <div class="datos__generales">
+            <div class="datos__logos">
+              <img class="img__jenkins" src="https://wiki.jenkins-ci.org/JENKINS/attachments/2916393/57409619.png" alt="">
+              <img class="img__aws" src="https://www.grupoinversores.com/wp-content/uploads/2022/06/aws-logo-teaser-1.png" alt="">                
+            </div>
+            <div class="datos__build">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/FailureIcon.png" alt="">              
+                <span>BUILD #20240923.8</span>
+                <span class="estatus">FAILED</span>
+                
+            </div>
+            <div class="datos__nombre">
+                <span>api-registro-express-nodejs-20</span>
+            </div>
+            <div class="datos__tiempo">
+                <span>Ran for 32 seconds</span>
+            </div>
+            <div class="datos__resultados">
+                <button class="boton">Ver resultados</button>
+            </div>
+        </div>       
+    </div>
+  </body>
+</html>
                 """,
                 subject: "Resultado del Pipeline: ${currentBuild.result} de ${env.API_NAME}",
                 to: 'rios.alb2606@gmail.com',
