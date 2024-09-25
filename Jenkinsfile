@@ -119,14 +119,163 @@ pipeline {
     post {
         always {     
             script{
-                def buildNumber = env.BUILD_NUMBER
+
+                def buildDuration = currentBuild.durationString ?: "N/A"
+                                                
                 def currentDate = new Date()
+                def formattedEndTime = currentDate.format('yyyy-MM-dd HH:mm:ss')
+                                
+                env.BUILD_DURATION = buildDuration
+                env.BUILD_END_TIME = formattedEndTime
+
+                def buildNumber = env.BUILD_NUMBER
                 def formattedDate = currentDate.format('yyyyMMdd')
                 env.newBuildName = "${formattedDate}.${buildNumber}"
             }                   
             emailext body: """
                     <html>
-                    <head>            
+                    <head>
+                        <style>
+                            *{
+                                box-sizing: border-box;
+                            }
+                            body {
+                                font-family: Arial, sans-serif;
+                                background-color: #fff;
+                                margin: 0;
+                                padding: 0;
+                                box-sizing: border-box;
+                            }
+                            .container {          
+                                width: 80%;
+                                margin: 0 auto;
+                                background-color: #ffffff;                        
+                            }
+                            /* *************************************************** */
+                            .datos__generales{                    
+                            height: auto;
+                            padding: 30px 0;      
+                            padding: 30px calc((100% - 640px) / 2);    
+                            }
+                            /* *************************************************** */
+                            .datos__logos{
+                                width: 100%;
+                                height: 40px;
+                                line-height: 40px;            
+                            }
+                            .datos__logos .img__jenkins{
+                                width: auto;
+                                height: 30px;
+                                float: left;
+                            }
+                            .datos__logos .img__aws{
+                                width: auto;
+                                height: 40px;
+                                float: right;
+                            }
+                            /* ******************************************************* */
+                            .datos__build{
+                                width: 100%;
+                                height: 40px;
+                                line-height: 40px;
+                                margin-top: 10px;            
+                            }
+                            .datos__build span:not(.icono){
+                            font-size: 12px;
+                            margin-left: 7px;
+                            }
+                            .datos__build .estatus{
+                            font-size: 12px;
+                            padding: 2px;
+                            background-color: #fde293;          
+                            }
+                    
+                            .datos__build img{
+                            width: 16px;
+                            height: 16px;          
+                            }
+                            /* ********************************************* */
+                            .datos__nombre{
+                                width: 100%;
+                                height: 40px;            
+                                font-size: 24px;
+                                font-weight: bold;
+                                margin-top: 20px;
+                            }
+                            .datos__tiempo{
+                                width: 100%;
+                                height: 40px;
+                                margin-top: 20px;
+                                font-size: 13px;
+                            }
+                            .datos__resultados{
+                            width: 100%;
+                            height: 40px;
+                            margin-top: 20px;
+                            }
+                            .datos__resultados a{
+                                color: white;
+                                background-color: #0078d4;
+                                font-size: 14px;
+                                padding: 8px 12px;
+                                border: none;
+                                text-decoration: none;
+                                cursor: pointer;
+                            }      
+                            /* ********************************************* */
+                            .detalles{        
+                            height: auto;
+                            padding: 30px 0;      
+                            padding: 30px calc((100% - 640px) / 2);
+                            background-color: #f8f8f8;        
+                            }
+                            .detalles__card{
+                            width: 100%;
+                            height: auto;
+                            background-color: #ffffff;
+                            padding: 20px;
+                            margin-bottom: 30px;
+                            }
+                            .card__titulo{
+                            width: 100%;
+                            height: 25px;
+                            line-height: 25px;
+                            font-size: 21px;
+                            font-weight: 600;
+                            }
+                            .card__datos{
+                            width: 100%;
+                            height: auto;
+                            padding-top: 12px;              
+                            }
+                            .card__datos .datos__info{
+                            width: 100%;
+                            height: 40px;
+                            line-height: 40px;                  
+                            border: 1px solid red;
+                            }        
+                            .datos__info .titulo{
+                            font-size: 13px;
+                            font-weight: 600;
+                            width: 30%;
+                            height: 100%;          
+                            }
+                            .datos__info .desc{
+                            font-size: 14px;               
+                            }
+                            .detalles__build{
+                            padding-top: 12px;          
+                            }
+
+                            .detalles__build p{
+                            margin: 0;
+                            font-size: 14px;
+                            }
+                            .mensaje__footer{
+                            font-size: 13px;
+                            color: gray;
+                            }
+                        </style>
                     </head>
                     <body>
                         <div class="container">
@@ -145,7 +294,7 @@ pipeline {
                                     <span>"${env.API_NAME}"</span>
                                 </div>
                                 <div class="datos__tiempo">
-                                    <span>Ran for 32 seconds</span>
+                                    <span>"Ran for ${env.BUILD_DURATION}"</span>
                                 </div>
                                 <div class="datos__resultados">
                                     <a class="boton" href="https://google.com.mx" target="_blank">Ver resultados</a>
@@ -159,7 +308,7 @@ pipeline {
                                 <table class="card__datos">
                                     <tr class="datos__info">
                                         <td class="titulo">Title</td>
-                                        <td class="desc">PR de devConflicts - develop</td>
+                                        <td class="desc">"${env.GIT_COMMIT_MESSAGE}"</td>
                                     </tr>
                                     <tr class="datos__info">
                                         <td class="titulo">Source branch</td>
@@ -188,7 +337,7 @@ pipeline {
                                     </tr>
                                     <tr class="datos__info">
                                         <td class="titulo">Finished</td>
-                                        <td class="desc">Thu, Aug 15 2024 18:43:31 GMT+00:00</td>
+                                        <td class="desc">"${env.BUILD_END_TIME}"</td>
                                     </tr>
                                     <tr class="datos__info">
                                         <td class="titulo">Requested for</td>
