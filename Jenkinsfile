@@ -117,7 +117,13 @@ pipeline {
         }
     }
     post {
-        always {                        
+        always {     
+            script{
+                def buildNumber = env.BUILD_NUMBER
+                def currentDate = new Date()
+                def formattedDate = currentDate.format('yyyyMMdd')
+                def newBuildName = "${formattedDate}.${buildNumber}"
+            }                   
             emailext body: """
                     <html>
                     <head>
@@ -272,7 +278,7 @@ pipeline {
                                 </div>
                                 <div class="datos__build">
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/FailureIcon.png" alt="">              
-                                    <span>BUILD #20240923.8</span>
+                                    <span>BUILD "#${env.newBuildName}"</span>
                                     <span class="estatus">FAILED</span>
                                     
                                 </div>
