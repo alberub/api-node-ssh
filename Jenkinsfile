@@ -16,7 +16,8 @@ pipeline {
                 checkout scm
                 script{
                     env.GIT_COMMIT_AUTHOR_EMAIL = sh(script: "git log -1 --pretty=format:'%ae'", returnStdout: true).trim()
-                    env.GIT_COMMIT_MESSAGE = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+                    env.GIT_COMMITTER_NAME      = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
+                    env.GIT_COMMIT_MESSAGE      = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
                 }
             }
         }
@@ -286,15 +287,15 @@ pipeline {
                                 </div>
                                 <div class="datos__build">
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/FailureIcon.png" alt="">              
-                                    <span>BUILD "#${env.newBuildName}"</span>
-                                    <span class="estatus">FAILED</span>
+                                    <span>BUILD #${env.newBuildName}</span>
+                                    <span class="estatus">${currentBuild.result}</span>
                                     
                                 </div>
                                 <div class="datos__nombre">
-                                    <span>"${env.API_NAME}"</span>
+                                    <span>${env.API_NAME}</span>
                                 </div>
                                 <div class="datos__tiempo">
-                                    <span>"Ran for ${env.BUILD_DURATION}"</span>
+                                    <span>Ran for ${env.BUILD_DURATION}</span>
                                 </div>
                                 <div class="datos__resultados">
                                     <a class="boton" href="https://google.com.mx" target="_blank">Ver resultados</a>
@@ -308,7 +309,7 @@ pipeline {
                                 <table class="card__datos">
                                     <tr class="datos__info">
                                         <td class="titulo">Title</td>
-                                        <td class="desc">"${env.GIT_COMMIT_MESSAGE}"</td>
+                                        <td class="desc">${env.GIT_COMMIT_MESSAGE}</td>
                                     </tr>
                                     <tr class="datos__info">
                                         <td class="titulo">Source branch</td>
@@ -337,11 +338,11 @@ pipeline {
                                     </tr>
                                     <tr class="datos__info">
                                         <td class="titulo">Finished</td>
-                                        <td class="desc">"${env.BUILD_END_TIME}"</td>
+                                        <td class="desc">${env.BUILD_END_TIME}</td>
                                     </tr>
                                     <tr class="datos__info">
                                         <td class="titulo">Requested for</td>
-                                        <td class="desc">Bryan Alberto Rios Uribe</td>
+                                        <td class="desc">${env.GIT_COMMITTER_NAME}</td>
                                     </tr>
                                     <tr class="datos__info">
                                         <td class="titulo">Reason</td>
