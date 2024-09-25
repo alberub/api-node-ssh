@@ -182,15 +182,21 @@ pipeline {
         }
         /* ********************************************* */
         .datos__nombre{
+            width: 100%;
+            height: 40px;            
             font-size: 24px;
             font-weight: bold;
             margin-top: 20px;
         }
         .datos__tiempo{
+            width: 100%;
+            height: 40px;
             margin-top: 20px;
             font-size: 13px;
         }
         .datos__resultados{
+          width: 100%;
+          height: 40px;
           margin-top: 20px;
         }
         .datos__resultados a{
