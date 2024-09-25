@@ -124,7 +124,7 @@ pipeline {
                 // http://198.199.86.210:9000/dashboard?id=escaneo-api-node-ssh
 
                 def sonarHostUrl = "${env.SERVER_IP}:9000"
-                def sonarReportUrl = "${sonarHostUrl}/dashboard?id=${env.SONAR_PROJECT_KEY}"
+                env.SONAR_REPORT_URL = "${sonarHostUrl}/dashboard?id=${env.SONAR_PROJECT_KEY}"
 
                 def buildDuration = currentBuild.durationString ?: "N/A"
                                                 
@@ -303,7 +303,7 @@ pipeline {
                                     <span>Ran for ${env.BUILD_DURATION}</span>
                                 </div>
                                 <div class="datos__resultados">
-                                    <a class="boton" href="${sonarReportUrl}" target="_blank">Ver resultados</a>
+                                    <a class="boton" href="${env.SONAR_REPORT_URL}" target="_blank">Ver resultados</a>
                                 </div>
                             </div>     
                             <div class="detalles">
