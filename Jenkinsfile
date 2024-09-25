@@ -119,7 +119,7 @@ pipeline {
     post {
         always {                        
             emailext body: """
-                <html>
+<html>
   <head>
     <style>
         *{
@@ -234,13 +234,25 @@ pipeline {
           border: 1px solid red;
         }        
         .datos__info .titulo{
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 600;
           width: 30%;
           height: 100%;          
         }
         .datos__info .desc{
           font-size: 14px;               
+        }
+        .detalles__build{
+          padding-top: 12px;          
+        }
+
+        .detalles__build p{
+          margin: 0;
+          font-size: 14px;
+        }
+        .mensaje__footer{
+          font-size: 13px;
+          color: gray;
         }
     </style>
   </head>
@@ -295,27 +307,39 @@ pipeline {
 
           <div class="detalles__card">
             <div class="card__titulo">
-                <span>Pull request</span>
+                <span>Summary</span>
             </div>
             <table class="card__datos">
                 <tr class="datos__info">
-                    <td class="titulo">Title</td>
-                    <td class="desc">PR de devConflicts - develop</td>
+                    <td class="titulo">Build pipeline</td>
+                    <td class="desc">api-registro-express-nodejs-20</td>
                 </tr>
                 <tr class="datos__info">
-                    <td class="titulo">Source branch</td>
-                    <td class="desc">devConflicts</td>
+                    <td class="titulo">Finished</td>
+                    <td class="desc">Thu, Aug 15 2024 18:43:31 GMT+00:00</td>
                 </tr>
                 <tr class="datos__info">
-                    <td class="titulo">Target branch</td>
-                    <td class="desc">develop</td>
+                    <td class="titulo">Requested for</td>
+                    <td class="desc">Bryan Alberto Rios Uribe</td>
                 </tr>
                 <tr class="datos__info">
-                    <td class="titulo">Description</td>
-                    <td class="desc">PR de devConflicts - develop</td>
+                    <td class="titulo">Reason</td>
+                    <td class="desc">Privates</td>
                 </tr>
               </table>
           </div>
+
+          <div class="detalles__card">
+            <div class="card__titulo">
+                <span>Details</span>
+            </div>
+            <div class="detalles__build">
+              <p>Build</p>
+              <p>0 erro(s), 0 warning(s)</p>
+            </div>
+          </div>
+
+          <span class="mensaje__footer">Este mensaje ha sido generado automáticamente por Jenkins.</span>
         </div>
 
     </div>
