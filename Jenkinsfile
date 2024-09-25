@@ -121,6 +121,11 @@ pipeline {
         always {     
             script{
 
+                // http://198.199.86.210:9000/dashboard?id=escaneo-api-node-ssh
+
+                def sonarHostUrl = "${env.SERVER_IP}:9000"
+                def sonarReportUrl = "${sonarHostUrl}/dashboard?id=${env.SONAR_PROJECT_KEY}"
+
                 def buildDuration = currentBuild.durationString ?: "N/A"
                                                 
                 def currentDate = new Date()
@@ -298,7 +303,7 @@ pipeline {
                                     <span>Ran for ${env.BUILD_DURATION}</span>
                                 </div>
                                 <div class="datos__resultados">
-                                    <a class="boton" href="https://google.com.mx" target="_blank">Ver resultados</a>
+                                    <a class="boton" href="${sonarReportUrl}" target="_blank">Ver resultados</a>
                                 </div>
                             </div>     
                             <div class="detalles">
@@ -334,7 +339,7 @@ pipeline {
                                 <table class="card__datos">
                                     <tr class="datos__info">
                                         <td class="titulo">Build pipeline</td>
-                                        <td class="desc">api-registro-express-nodejs-20</td>
+                                        <td class="desc">${env.API_NAME}</td>
                                     </tr>
                                     <tr class="datos__info">
                                         <td class="titulo">Finished</td>
