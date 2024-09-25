@@ -119,7 +119,7 @@ pipeline {
     post {
         always {                        
             emailext body: """
-<html>
+                <html>
   <head>
     <style>
         *{
@@ -135,15 +135,13 @@ pipeline {
         .container {          
             width: 80%;
             margin: 0 auto;
-            background-color: #f8f8f8;
-            padding: 20px;
-            padding: 0 calc((80% - 640px) / 2);
+            background-color: #ffffff;                        
           }
           /* *************************************************** */
-        .datos__generales{          
-          width: 640px;
+        .datos__generales{                    
           height: auto;
-          padding: 30px 0;          
+          padding: 30px 0;      
+          padding: 30px calc((100% - 640px) / 2);    
         }
         /* *************************************************** */
         .datos__logos{
@@ -202,7 +200,48 @@ pipeline {
             padding: 8px 12px;
             border: none;
             cursor: pointer;
+        }      
+        /* ********************************************* */
+        .detalles{        
+          height: auto;
+          padding: 30px 0;      
+          padding: 30px calc((100% - 640px) / 2);
+          background-color: #f8f8f8;        
+        }
+        .detalles__card{
+          width: 100%;
+          height: auto;
+          background-color: #ffffff;
+          padding: 20px;
+          margin-bottom: 30px;
+        }
+        .card__titulo{
+          width: 100%;
+          height: 25px;
+          line-height: 25px;
+          font-size: 21px;
+          font-weight: 600;
+        }
+        .card__datos{
+          width: 100%;
+          height: auto;
+          padding-top: 12px;              
+        }
+        .card__datos .datos__info{
+          width: 100%;
+          height: 40px;
+          line-height: 40px;                  
+          border: 1px solid red;
         }        
+        .datos__info .titulo{
+          font-size: 14px;
+          font-weight: 600;
+          width: 30%;
+          height: 100%;          
+        }
+        .datos__info .desc{
+          font-size: 14px;               
+        }
     </style>
   </head>
   <body>
@@ -227,7 +266,58 @@ pipeline {
             <div class="datos__resultados">
                 <button class="boton">Ver resultados</button>
             </div>
-        </div>       
+        </div>     
+        <div class="detalles">
+          <div class="detalles__card">
+              <div class="card__titulo">
+                  <span>Pull request</span>
+              </div>
+              <table class="card__datos">
+                  <tr class="datos__info">
+                      <td class="titulo">Title</td>
+                      <td class="desc">PR de devConflicts - develop</td>
+                  </tr>
+                  <tr class="datos__info">
+                      <td class="titulo">Source branch</td>
+                      <td class="desc">devConflicts</td>
+                  </tr>
+                  <tr class="datos__info">
+                      <td class="titulo">Target branch</td>
+                      <td class="desc">develop</td>
+                  </tr>
+                  <tr class="datos__info">
+                      <td class="titulo">Description</td>
+                      <td class="desc">PR de devConflicts - develop</td>
+                  </tr>
+                </table>
+
+          </div>
+
+          <div class="detalles__card">
+            <div class="card__titulo">
+                <span>Pull request</span>
+            </div>
+            <table class="card__datos">
+                <tr class="datos__info">
+                    <td class="titulo">Title</td>
+                    <td class="desc">PR de devConflicts - develop</td>
+                </tr>
+                <tr class="datos__info">
+                    <td class="titulo">Source branch</td>
+                    <td class="desc">devConflicts</td>
+                </tr>
+                <tr class="datos__info">
+                    <td class="titulo">Target branch</td>
+                    <td class="desc">develop</td>
+                </tr>
+                <tr class="datos__info">
+                    <td class="titulo">Description</td>
+                    <td class="desc">PR de devConflicts - develop</td>
+                </tr>
+              </table>
+          </div>
+        </div>
+
     </div>
   </body>
 </html>
