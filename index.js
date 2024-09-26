@@ -3,11 +3,7 @@ const app = express();
 const port = 3000;
 
 function funcionDuplicada() {
-    return 'Código duplicado para que falle sonar';
-}
-
-function funcionDuplicada() {
-    return 'Código duplicado para que falle sonar';
+    return 'API nodejs desplegada vía SSH con Jenkins y github(WebHook)';
 }
 
 app.get('/', (req, res) => {
