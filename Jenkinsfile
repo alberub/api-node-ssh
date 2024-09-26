@@ -18,6 +18,7 @@ pipeline {
                     env.GIT_COMMIT_AUTHOR_EMAIL = sh(script: "git log -1 --pretty=format:'%ae'", returnStdout: true).trim()
                     env.GIT_COMMITTER_NAME      = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
                     env.GIT_COMMIT_MESSAGE      = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+                    env.GIT_BRANCH_NAME         = sh(script: 'git branch --show-current', returnStdout: true).trim()
                 }
             }
         }
@@ -119,11 +120,9 @@ pipeline {
     }
     post {
         always {     
-            script{
+            script{                
 
-                // http://198.199.86.210:9000/dashboard?id=escaneo-api-node-ssh
-
-                def sonarHostUrl = "${env.SERVER_IP}:9000"
+                def sonarHostUrl = "http://198.199.86.210:9000"
                 env.SONAR_REPORT_URL = "${sonarHostUrl}/dashboard?id=${env.SONAR_PROJECT_KEY}"
 
                 def buildDuration = currentBuild.durationString ?: "N/A"
@@ -373,7 +372,7 @@ pipeline {
                     </body>
                     </html>
                 """,
-                subject: "Resultado del Pipeline: ${currentBuild.result} de ${env.API_NAME}",
+                subject: "[PR build ${currentBuild.result}] - ${env.API_NAME} - ${env.GIT_BRANCH_NAME}",
                 to: 'rios.alb2606@gmail.com',
                 recipientProviders: [[$class: 'CulpritsRecipientProvider']]                
         }
