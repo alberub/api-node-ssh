@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 
 function funcionDuplicada() {
-    return 'Primer commit con un pipeline llamando a otro.';
+    return 'Pipelina de sonarqube con responsabilidad única';
 }
 
 app.get('/', (req, res) => {
