@@ -40,7 +40,7 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script {
-                    timeout(time: 1, unit: 'MINUTES') { // Puedes ajustar el tiempo de espera
+                    timeout(time: 1, unit: 'MINUTES') {
                         def qualityGate = waitForQualityGate()
                         if (qualityGate.status != 'OK') {
                             error "La compuerta de calidad ha fallado con el estado: ${qualityGate.status}. Revisa el análisis de SonarQube para más detalles."
@@ -55,7 +55,7 @@ pipeline {
                 script {
                     echo "Preparando despliegue en: ${env.APP_PATH}"
                     echo "IP del servidor: ${env.SERVER_IP}"
-                    sh 'env | sort'  // Imprime todas las variables de entorno
+                    sh 'env | sort'
                 }
             }
         }
@@ -65,25 +65,21 @@ pipeline {
                 sshagent(credentials: ['ssh-credentials']) {
                     script {
                         echo "Intentando conectar a ${env.SERVER_IP}"
-                        
-                        // Verificar conexión SSH
+                                                
                         sh "ssh -o StrictHostKeyChecking=no root@${env.SERVER_IP} 'echo \"Conexión SSH exitosa\"'" 
-                        
-                        // Crear directorio en el servidor
+                                                
                         sh """
                             ssh -o StrictHostKeyChecking=no root@${env.SERVER_IP} '
                                 mkdir -p "${env.APP_PATH}" && 
                                 echo "Directorio creado exitosamente"
                             '
                         """
-                        
-                        // Transferir archivos
+                                                
                         sh """
                             scp -r * root@${env.SERVER_IP}:"${env.APP_PATH}" && 
                             echo "Archivos transferidos exitosamente"
                         """
-                        
-                        // Instalar dependencias
+                                                
                         sh """
                             ssh -o StrictHostKeyChecking=no root@${env.SERVER_IP} '
                                 cd "${env.APP_PATH}" && 
