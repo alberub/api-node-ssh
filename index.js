@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 
 function funcionDuplicada() {
-    return 'Verificando que corra en automatico';
+    return 'Primer commit a master';
 }
 
 app.get('/', (req, res) => {
