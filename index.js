@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 
 function funcionDuplicada() {
-    return 'Ejemplo de api sin jenkinsfile';
+    return 'Corriendo el pipeline por primera vez';
 }
 
 app.get('/', (req, res) => {
