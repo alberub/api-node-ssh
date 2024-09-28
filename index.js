@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 
 function funcionDuplicada() {
-    return 'Hola mundo';
+    return 'Primer commit con un pipeline llamando a otro';
 }
 
 app.get('/', (req, res) => {
