@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 
 function funcionDuplicada() {
-    return 'API nodejs desplegada vía SSH con Jenkins y github(WebHook)';
+    return 'Ejemplo de api sin jenkinsfile';
 }
 
 app.get('/', (req, res) => {
