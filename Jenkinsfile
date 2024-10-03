@@ -369,7 +369,7 @@ pipeline {
                     </html>
                 """,
                 subject: "[PR build ${currentBuild.result}] - ${env.API_NAME} - ${env.GIT_BRANCH_NAME}",
-                to: 'rios.alb2606@gmail.com',
+                to: ${env.GIT_COMMIT_AUTHOR_EMAIL],
                 recipientProviders: [[$class: 'CulpritsRecipientProvider']]                
         }
     }
