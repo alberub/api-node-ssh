@@ -1,6 +1,6 @@
 const express = require('express');
+require('dotenv').config();
 const app = express();
-const port = 3000;
 
 function funcionDuplicada() {
     return 'API nodejs desplegada vía SSH con Jenkins y github(WebHook)';
@@ -11,5 +11,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Servidor escuchando en el puerto ${port}`);
+    console.log(`Servidor escuchando en el puerto ${process.env.PORT}`);
 });
